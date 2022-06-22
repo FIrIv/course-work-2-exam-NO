@@ -2,65 +2,41 @@ package pro.sky.coursework2exam.services;
 
 import org.springframework.stereotype.Service;
 import pro.sky.coursework2exam.data.Question;
-import pro.sky.coursework2exam.exceptions.BadInputDataException;
-import pro.sky.coursework2exam.exceptions.ItemNotFoundException;
 import pro.sky.coursework2exam.interfaces.QuestionService;
 
-import java.util.HashSet;
 import java.util.Set;
+
 @Service
 public class JavaQuestionService implements QuestionService {
-    private Set <Question> questions;
+
     private java.util.Random random = new java.util.Random();
-    public JavaQuestionService () {
-        this.questions = new HashSet<Question>();
+    private final JavaQuestionRepository javaQuestionRepository;
+
+    public JavaQuestionService (JavaQuestionRepository javaQuestionRepository) {
+        this.javaQuestionRepository = javaQuestionRepository;
     }
 
     @Override
-    public Question add(String question, String answer) {
-        if (question == null || answer == null) {
-            throw new BadInputDataException();
-        }
-        Question temp = new Question (question, answer);
-        this.questions.add(temp);
-        return temp;
+    public Question add (String question, String answer) {
+        return this.javaQuestionRepository.add(question, answer);
     }
 
     @Override
-    public Question add(Question question) {
-        if (question == null) {
-            throw new NullPointerException();
-        }
-        if (question.getQuestion()==null || question.getAnswer()==null) {
-            throw new BadInputDataException();
-        }
-        this.questions.add(question);
-        return question;
+    public Question add (Question question) {
+        return this.javaQuestionRepository.add(question);
     }
-
     @Override
-    public Question remove(Question question) {
-        if (question == null) {
-            throw new NullPointerException();
-        }
-        if (question.getQuestion()==null || question.getAnswer()==null) {
-            throw new BadInputDataException();
-        }
-        if (!this.questions.contains(question)) {
-            throw new ItemNotFoundException();
-        }
-        this.questions.remove(question);
-        return question;
+    public Question remove (Question question) {
+        return this.javaQuestionRepository.remove(question);
     }
-
     @Override
-    public Set<Question> getAll() {
-        return questions;
+    public Set<Question> getAll () {
+        return this.javaQuestionRepository.getAll();
     }
 
     @Override
     public Question getRandomQuestion() {
-        int index = random.nextInt(this.questions.size());
-        return this.questions.stream().toList().get(index);
+        int index = random.nextInt(javaQuestionRepository.getAll().size());
+        return this.javaQuestionRepository.getAll().stream().toList().get(index);
     }
 }
