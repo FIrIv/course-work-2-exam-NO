@@ -6,24 +6,24 @@ import pro.sky.coursework2exam.exceptions.BadRequestException;
 import pro.sky.coursework2exam.interfaces.ExaminerService;
 import pro.sky.coursework2exam.interfaces.QuestionService;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
 public class ExaminerServiceImpl implements ExaminerService {
 
     private java.util.Random random = new java.util.Random();
-    private int countJavaQ;
-    private int countMathQ;
 
-    private final JavaQuestionService javaQuestionService;
+    private List<Integer> countQ = new ArrayList<>();
 
-    private final MathQuestionService mathQuestionService;
+    private final List<QuestionService> questionServices = new ArrayList<>();
 
     public ExaminerServiceImpl (JavaQuestionService javaQuestionService,
                                 MathQuestionService mathQuestionService) {
-        this.javaQuestionService = javaQuestionService;
-        this.mathQuestionService = mathQuestionService;
+        this.questionServices.add(javaQuestionService);
+        this.questionServices.add(mathQuestionService);
     }
 
     @Override
@@ -31,41 +31,65 @@ public class ExaminerServiceImpl implements ExaminerService {
         Set <Question> temp = new HashSet<>();
         int temp_amount = 0;
 
+        // генерируем кол-во вопросов для каждого сервиса
         generateCountsJavaMathQuestions (amount);
 
-        while (temp_amount<this.countJavaQ) {
-            Question q = javaQuestionService.getRandomQuestion();
-            if (!temp.contains(q)) {
-                temp.add(q);
-                temp_amount++;
+        int previousCountQ = 0;
+        for (int i=0; i<questionServices.size(); i++) {
+            while (temp_amount < previousCountQ+countQ.get(i)) {
+                Question q = questionServices.get(i).getRandomQuestion();
+                if (!temp.contains(q)) {
+                    temp.add(q);
+                    temp_amount++;
+                }
             }
-        }
-
-        while (temp_amount<this.countJavaQ + this.countMathQ) {
-            Question q = mathQuestionService.getRandomQuestion();
-            if (!temp.contains(q)) {
-                temp.add(q);
-                temp_amount++;
-            }
+            previousCountQ = countQ.get(i);
         }
 
         return temp;
     }
 
     private void generateCountsJavaMathQuestions (int amount) {
-        if (javaQuestionService.getAll().size() + mathQuestionService.getAll().size() < amount) {
+        if (this.questionServices.stream().mapToInt(e->e.getAll().size()).sum() < amount) {
             throw new BadRequestException();
         }
 
-        this.countJavaQ = random.nextInt(amount);
-        if (this.countJavaQ>javaQuestionService.getAll().size()) {
-            this.countJavaQ = javaQuestionService.getAll().size();
+        int sum = 0;
+        for (int i=0; i<this.questionServices.size(); i++) {
+            countQ.add(i, random.nextInt(this.questionServices.get(i).getAll().size()));
+            sum += countQ.get(i);
         }
 
-        this.countMathQ = amount - this.countJavaQ;
-        if (countMathQ>mathQuestionService.getAll().size()) {
-            this.countJavaQ += this.countMathQ - mathQuestionService.getAll().size();
-            this.countMathQ = mathQuestionService.getAll().size();
+        // если сгенерированные кол-ва вопросов превысили общее нужное кол-во,
+        // уменьшаем по всем, пока не дойдем до нормы
+        while (sum>amount) {
+            for (int i=0; i<this.questionServices.size(); i++) {
+                // чтобы ниже 0 не упало кол-во вопросов очередного сервиса
+                if (countQ.get(i)>0) {
+                    countQ.set(i, countQ.get(i) - 1);
+                    sum -= 1;
+                    if (sum == amount) {
+                        break;
+                    }
+                }
+            }
         }
+
+        // если сгенерированные кол-ва вопросов не дотянули до общего нужного кол-ва,
+        // увеличиваем по всем, пока не дойдем до нормы
+        while (sum<amount) {
+            for (int i=0; i<this.questionServices.size(); i++) {
+                countQ.set(i, countQ.get(i)+1);
+                sum += 1;
+                if (sum == amount) {
+                    break;
+                }
+            }
+        }
+
+        for (int i=0; i<this.questionServices.size(); i++) {
+            System.out.print("по " + (i+1) + "-ой дисципл. " + countQ.get(i)+" вопросов, ");
+        }
+        System.out.println();
     }
 }
