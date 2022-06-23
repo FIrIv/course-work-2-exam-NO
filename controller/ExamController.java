@@ -1,11 +1,10 @@
-package pro.sky.coursework2exam.controllers;
+package pro.sky.coursework2exam.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import pro.sky.coursework2exam.data.Question;
-import pro.sky.coursework2exam.services.ExaminerServiceImpl;
+import pro.sky.coursework2exam.service.ExaminerServiceImpl;
 
 import java.util.Set;
 
@@ -18,7 +17,7 @@ public class ExamController {
         this.examinerService = examinerService;
     }
 
-    @GetMapping(path ="")
+    @GetMapping
     public Set<Question> getQuestions (@RequestParam("amount") int amount) {
         return examinerService.getQuestions(amount);
     }

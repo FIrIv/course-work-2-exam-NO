@@ -1,11 +1,13 @@
-package pro.sky.coursework2exam.controllers;
+package pro.sky.coursework2exam.controller;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import pro.sky.coursework2exam.data.Question;
-import pro.sky.coursework2exam.services.JavaQuestionService;
+import pro.sky.coursework2exam.interfaces.QuestionService;
+import pro.sky.coursework2exam.service.JavaQuestionService;
 
 import java.util.Set;
 
@@ -13,13 +15,14 @@ import java.util.Set;
 @RequestMapping (path = "/java")
 public class JavaQuestionController {
 
-    private final JavaQuestionService javaQuestionService;
+    @Qualifier("JavaQuestionService")
+    private final QuestionService javaQuestionService;
 
     public JavaQuestionController (JavaQuestionService javaQuestionService) {
         this.javaQuestionService = javaQuestionService;
     }
 
-    @GetMapping(path ="")
+    @GetMapping
     public Set<Question> getAllQuestions () {
         return javaQuestionService.getAll();
     }

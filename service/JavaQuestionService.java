@@ -1,4 +1,4 @@
-package pro.sky.coursework2exam.services;
+package pro.sky.coursework2exam.service;
 
 import org.springframework.stereotype.Service;
 import pro.sky.coursework2exam.data.Question;
@@ -9,7 +9,7 @@ import java.util.Set;
 @Service
 public class JavaQuestionService implements QuestionService {
 
-    private java.util.Random random = new java.util.Random();
+    private final java.util.Random random = new java.util.Random();
     private final JavaQuestionRepository javaQuestionRepository;
 
     public JavaQuestionService (JavaQuestionRepository javaQuestionRepository) {

@@ -1,9 +1,8 @@
-package pro.sky.coursework2exam.services;
+package pro.sky.coursework2exam.service;
 
 import org.springframework.stereotype.Service;
 import pro.sky.coursework2exam.data.Question;
-import pro.sky.coursework2exam.exceptions.MethodNotAllowedException;
-import pro.sky.coursework2exam.interfaces.QuestionRepository;
+import pro.sky.coursework2exam.exception.MethodNotAllowedException;
 import pro.sky.coursework2exam.interfaces.QuestionService;
 
 import java.util.HashSet;
@@ -25,9 +24,9 @@ public class MathQuestionService implements QuestionService {
         mathQuestions.add(new Question("Во сколько раз лестница на 6-й этаж дома длиннее лестницы на 2-й этаж этого же дома?","5"));
     }
 
-    private Set <Question> mathQuestions = new HashSet<>();
+    private final Set <Question> mathQuestions = new HashSet<>();
 
-    private java.util.Random random = new java.util.Random();
+    private final java.util.Random random = new java.util.Random();
 
     @Override
     public Question add (String question, String answer) {

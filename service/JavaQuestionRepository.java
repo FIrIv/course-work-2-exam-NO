@@ -1,9 +1,9 @@
-package pro.sky.coursework2exam.services;
+package pro.sky.coursework2exam.service;
 
 import org.springframework.stereotype.Repository;
 import pro.sky.coursework2exam.data.Question;
-import pro.sky.coursework2exam.exceptions.BadInputDataException;
-import pro.sky.coursework2exam.exceptions.ItemNotFoundException;
+import pro.sky.coursework2exam.exception.BadInputDataException;
+import pro.sky.coursework2exam.exception.ItemNotFoundException;
 import pro.sky.coursework2exam.interfaces.QuestionRepository;
 
 import javax.annotation.PostConstruct;
@@ -13,7 +13,7 @@ import java.util.Set;
 @Repository
 public class JavaQuestionRepository implements QuestionRepository {
 
-    private Set <Question> questions;
+    private final Set <Question> questions;
 
     public JavaQuestionRepository () {
         this.questions = new HashSet<Question>();
@@ -46,7 +46,7 @@ public class JavaQuestionRepository implements QuestionRepository {
     @Override
     public Question add(Question question) {
         if (question == null) {
-            throw new NullPointerException();
+            throw new BadInputDataException();
         }
         if (question.getQuestion()==null || question.getAnswer()==null) {
             throw new BadInputDataException();
@@ -58,7 +58,7 @@ public class JavaQuestionRepository implements QuestionRepository {
     @Override
     public Question remove(Question question) {
         if (question == null) {
-            throw new NullPointerException();
+            throw new BadInputDataException();
         }
         if (question.getQuestion()==null || question.getAnswer()==null) {
             throw new BadInputDataException();
