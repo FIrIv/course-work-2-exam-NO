@@ -1,9 +1,9 @@
-package pro.sky.coursework2exam.service;
+package pro.sky.coursework2exam.service.impl;
 
 import org.springframework.stereotype.Service;
 import pro.sky.coursework2exam.data.Question;
 import pro.sky.coursework2exam.exception.MethodNotAllowedException;
-import pro.sky.coursework2exam.interfaces.QuestionService;
+import pro.sky.coursework2exam.service.QuestionService;
 
 import java.util.HashSet;
 import java.util.Set;

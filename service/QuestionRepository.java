@@ -1,4 +1,4 @@
-package pro.sky.coursework2exam.interfaces;
+package pro.sky.coursework2exam.service;
 
 import pro.sky.coursework2exam.data.Question;
 

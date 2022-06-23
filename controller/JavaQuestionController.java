@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import pro.sky.coursework2exam.data.Question;
-import pro.sky.coursework2exam.interfaces.QuestionService;
-import pro.sky.coursework2exam.service.JavaQuestionService;
+import pro.sky.coursework2exam.service.QuestionService;
+import pro.sky.coursework2exam.service.impl.JavaQuestionService;
 
 import java.util.Set;
 

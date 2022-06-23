@@ -1,10 +1,10 @@
-package pro.sky.coursework2exam.service;
+package pro.sky.coursework2exam.service.impl;
 
 import org.springframework.stereotype.Service;
 import pro.sky.coursework2exam.data.Question;
 import pro.sky.coursework2exam.exception.BadRequestException;
-import pro.sky.coursework2exam.interfaces.ExaminerService;
-import pro.sky.coursework2exam.interfaces.QuestionService;
+import pro.sky.coursework2exam.service.ExaminerService;
+import pro.sky.coursework2exam.service.QuestionService;
 
 import java.util.ArrayList;
 import java.util.HashSet;
